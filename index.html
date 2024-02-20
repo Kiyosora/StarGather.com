@@ -43,14 +43,15 @@
 <body>
     <h1>自助好评投放 V0.12</h1>
     <label for="times">IP地址 → </label>
-    <input type="text" id="ipa" name="ipa" value='0.0.0.0:8002'>
+    <input type="text" id="ipa" name="ipa">
     <br>
     <label for="times">刷几次 → </label>
     <input type="number" id="times" name="times" min="1" max="100" value="20">
     <button id="send">开刷</button>
     <div id="log"></div>
     <script>
-
+        var params = new URLSearchParams(window.location.search);
+        document.getElementById('ipa').value = params.get('ipa') || '0.0.0.0:8002'
         document.getElementById('send').addEventListener('click', async function() {
             var ipa = document.getElementById('ipa').value;
             var times = document.getElementById('times').value;
