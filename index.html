@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>自助好评投放 V0.12 Powered By Kiyosora</title>
+    <meta name="viewport" content="width-device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            color: #333;
+        }
+        label, input, button {
+            margin: 10px;
+            display: inline-block;
+        }
+        #log {
+            width: 250px;
+            height: 500px;
+            margin: 10px;
+            border: 1px solid #888;
+            overflow: auto;
+            padding: 10px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            font-size: 12px;
+        }
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>自助好评投放 V0.12</h1>
+    <label for="times">IP地址 → </label>
+    <input type="text" id="ipa" name="ipa" value='0.0.0.0:8002'>
+    <br>
+    <label for="times">刷几次 → </label>
+    <input type="number" id="times" name="times" min="1" max="100" value="20">
+    <button id="send">开刷</button>
+    <div id="log"></div>
+    <script>
+
+        document.getElementById('send').addEventListener('click', async function() {
+            var ipa = document.getElementById('ipa').value;
+            var times = document.getElementById('times').value;
+            var log = document.getElementById('log');
+            log.innerHTML += '开始刷 ' + times + ' 次好评： <br>';
+            for (var i = 1; i <= times; i++) {
+                var formData = new FormData();
+                formData.append("data", "{\"1101\":\"总是\",\"1102\":\"总是\",\"1103\":\"总是\",\"1104\":\"总是\",\"1105\":\"总是\",\"1106\":\"总是\",\"1107\":\"总是\",\"1108\":\"总是\",\"1109\":\"总是\",\"1110\":\"总是\",\"1111\":\"总是\",\"1112\":\"满意\",\"1113\":\"穴位贴敷\",\"1114\":\"清楚\",\"1115\":\"满意\",\"1116\":\"效果明显\",\"1117\":\"是\",\"1118\":\"总是\",\"1119\":\"总是\",\"1120\":\"总是\",\"1121\":\"是\",\"1122\":\"完全清楚\",\"1123\":\"是\",\"1124\":\"是\",\"1125\":\"\",\"1126\":\"\",\"1127\":\"\",\"1128\":\"\",\"1130\":\"\",\"1131\":\"\",\"1133\":\"是\",\"1134\":\"满意\",\"1135\":\"满意\",\"1136\":\"满意\",\"1137\":\"清楚\"}");
+                formData.append("JGID", "");
+                formData.append("ZZID", "");
+                formData.append("CJR", "");
+                formData.append("CJSJ", "");
+                formData.append("SJLY", "0");
+                formData.append("KSID", "1000150");
+                formData.append("BRID", "1");
+                formData.append("JBID", "0");
+                formData.append("BZID", "11");
+                formData.append("HOSID", "");
+                // append other form data as necessary
+                fetch('http://' + ipa + '/sys/appmyd/Save', {
+                    method: 'POST',
+                    headers: {
+                        'Cookie': 'BZID=; BZID11000150=11000150'
+                    },
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    res = JSON.stringify(data)
+                    log.innerHTML += 'Turn: ' + i + ', Result: ' + res + '<br>';
+                })
+                .catch((error) => {
+                    log.innerHTML += 'Turn: ' + i + ', Error: ' + error + '<br>';
+                });
+                await new Promise(resolve => setTimeout(resolve, 300)); // wait for 300ms
+            }
+            log.innerHTML += '----------- Done ------------<br>';
+        });
+    </script>
+</body>
+</html>
